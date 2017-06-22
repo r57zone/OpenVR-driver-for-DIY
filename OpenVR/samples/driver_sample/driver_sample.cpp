@@ -98,11 +98,11 @@ void WatchdogThreadFunction(  )
 #if defined( _WINDOWS )
 
 		// on windows send the event when the Y key is pressed.
-		if ( (0x01 & GetAsyncKeyState( 'Y' )) != 0 )
-		{
+		//if ( (0x01 & GetAsyncKeyState( 'Y' )) != 0 )
+		//{
 			// Y key was pressed. 
-			vr::VRWatchdogHost()->WatchdogWakeUp();
-		}
+			//vr::VRWatchdogHost()->WatchdogWakeUp();
+		//}
 		std::this_thread::sleep_for( std::chrono::microseconds( 500 ) );
 #else
 		// for the other platforms, just send one every five seconds
