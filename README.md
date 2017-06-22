@@ -2,13 +2,13 @@
 Драйвер для SteamVR, позволяющий изменять позицию головы, с помощью кнопок.
 
 ## Кнопки
-NumPad 2 и 8 - поворот вверх и вниз.
-NumPad 4 и 6 - поворот вправо и влево.
-NumPad 1 и 3 - вращение головы влево и вправо.
-NumPad 9 - сброс поворотов и вращения.
+NumPad 2 и 8 - поворот вверх и вниз.<br>
+NumPad 4 и 6 - поворот вправо и влево.<br>
+NumPad 1 и 3 - вращение головы влево и вправо.<br>
+NumPad 9 - сброс поворотов и вращения.<br>
 
 ## Настройка 
-1. Переместить и заменить папку "null", из архива, в папку "...\Steam\steamapps\common\SteamVR\drivers\null". 
+1. Переместить и заменить папку "null", из архива, в папку "...\Steam\steamapps\common\SteamVR\drivers\null".
 2. Переместить и заменить файл "steamvr.vrsettings", из архива, в папке "...\Steam\config".
 
 ## Загрузка
@@ -22,9 +22,9 @@ NumPad 9 - сброс поворотов и вращения.
 Driver for SteamVR, allowing change the rotation of the head with buttons.
 
 ## Buttons
-NumPad 2 и 8 - turn up and down.
-NumPad 4 и 6 - turn left and right.
-NumPad 1 и 3 - rotation of the head left and right.
+NumPad 2 и 8 - turn up and down.<br>
+NumPad 4 и 6 - turn left and right.<br>
+NumPad 1 и 3 - rotation of the head left and right.<br>
 NumPad 9 - resetting of turns and rotation.
 
 ## Setup
