@@ -1,5 +1,5 @@
 # RU
-Драйвер для SteamVR, позволяющий изменять позицию головы, с помощью кнопок.<br><br>
+Драйвер для OpenVR / SteamVR, позволяющий изменять позицию головы, с помощью кнопок.<br><br>
 ![](https://user-images.githubusercontent.com/9499881/27448173-cff2d362-5794-11e7-9514-8b10fb966c92.gif)
 ## Кнопки
 NumPad 2 и 8 - поворот вверх и вниз.<br>
@@ -19,7 +19,7 @@ NumPad 9 - сброс поворотов и вращения.<br>
 `r57zone[собака]gmail.com`
 
 # En
-Driver for SteamVR, allowing change the rotation of the head with buttons.
+Driver for OpenVR / SteamVR, allowing change the rotation of the head with buttons.
 
 ## Buttons
 NumPad 2 и 8 - turn up and down.<br>
