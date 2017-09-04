@@ -64,7 +64,8 @@ static const char * const k_pch_Sample_SecondsFromVsyncToPhotons_Float = "second
 static const char * const k_pch_Sample_DisplayFrequency_Float = "displayFrequency";
 
 //Head tracking vars
-float yaw = 0, pitch = 0, roll = 0;
+double yaw = 0, pitch = 0, roll = 0;
+double pX = 0, pY = 0, pZ = 0;
 double t0, t1, t2, t3, t4, t5;
 
 //-----------------------------------------------------------------------------
@@ -370,6 +371,21 @@ public:
 			pitch = 0;
 			roll = 0;
 		}
+
+		if ((GetAsyncKeyState(VK_UP) & 0x8000) != 0) pZ += -0.01;
+		if ((GetAsyncKeyState(VK_DOWN) & 0x8000) != 0) pZ += 0.01;
+		
+		if ((GetAsyncKeyState(VK_LEFT) & 0x8000) != 0) pX += -0.01;
+		if ((GetAsyncKeyState(VK_RIGHT) & 0x8000) != 0) pX += 0.01;
+		
+		if ((GetAsyncKeyState(VK_PRIOR) & 0x8000) != 0) pY += 0.01;
+		if ((GetAsyncKeyState(VK_NEXT) & 0x8000) != 0) pY += -0.01;
+
+		if ((GetAsyncKeyState(VK_END) & 0x8000) != 0) { pX = 0; pY = 0; pZ = 0; }
+
+		pose.vecPosition[0] = pX;
+		pose.vecPosition[1] = pY;
+		pose.vecPosition[2] = pZ;
 
 		//Convert yaw, pitch, roll to quaternion
 		t0 = cos(yaw * 0.5);

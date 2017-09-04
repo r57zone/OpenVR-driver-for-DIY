@@ -6,6 +6,11 @@ NumPad 2 и 8 - поворот вверх и вниз.<br>
 NumPad 4 и 6 - поворот вправо и влево.<br>
 NumPad 1 и 3 - вращение головы влево и вправо.<br>
 NumPad 9 - сброс поворотов и вращения.<br>
+Стрелка вверх и стрелка вниз - движение вперед и назад.<br>
+Стрелка влево и вправо - движение влево и вправо.<br>
+PageUp и PageDown - движение вверх и вниз.<br>
+End - сброс позиции.<br>
+
 
 ## Настройка 
 1. Переместить и заменить папку "null", из архива, в папку "...\Steam\steamapps\common\SteamVR\drivers\null".
@@ -22,17 +27,21 @@ NumPad 9 - сброс поворотов и вращения.<br>
 Driver for OpenVR / SteamVR, allowing change the rotation of the head with buttons.
 
 ## Buttons
-NumPad 2 и 8 - turn up and down.<br>
-NumPad 4 и 6 - turn left and right.<br>
-NumPad 1 и 3 - rotation of the head left and right.<br>
+NumPad 2 & 8 - turn up and down.<br>
+NumPad 4 & 6 - turn left and right.<br>
+NumPad 1 & 3 - rotation of the head left and right.<br>
 NumPad 9 - resetting of turns and rotation.
+Up & Down - move forward and back.<br>
+Left & Right - move left and right.<br>
+PageUp и PageDown - move up and down.<br>
+End - reset position.<br>
 
 ## Setup
 1. Move and replace the "null" folder, from the archive, to the folder "...\Steam\steamapps\common\SteamVR\drivers\null".
 2. Move and replace the file "steamvr.vrsettings", from the archive, in the folder "...\Steam\config".
 
 ## Download
->Version for x86 и x64.<br>
+>Version for x86 & x64.<br>
 **[Download](https://github.com/r57zone/OpenVR-head-tracking-with-buttons/releases)**<br>
 
 ## Feedback
