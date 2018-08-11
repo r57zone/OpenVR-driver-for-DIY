@@ -158,6 +158,7 @@
   <ItemGroup>
     <ClCompile Include="driverlog.cpp" />
     <ClCompile Include="driver_sample.cpp" />
+    <ClCompile Include="DummyController.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="driverlog.h" />

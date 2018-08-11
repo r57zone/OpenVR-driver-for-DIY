@@ -1,6 +1,8 @@
 //============ Copyright (c) Valve Corporation, All rights reserved. ============
+//=============== Changed by r57zone (https://github.com/r57zone) ===============
 
 #include <openvr_driver.h>
+#include "DummyController.h" //Controllers implementation from https://github.com/terminal29/Simple-OpenVR-Driver-Tutorial
 
 #include <vector>
 #include <thread>
@@ -68,6 +70,15 @@ double yaw = 0, pitch = 0, roll = 0;
 double pX = 0, pY = 0, pZ = 0;
 double t0, t1, t2, t3, t4, t5;
 
+DummyController controller_left;
+DummyController controller_right;
+
+double cyaw = 0, cpitch = 0, croll = 0;
+double cpX = 0, cpY = 0, cpZ = 0;
+double ct0, ct1, ct2, ct3, ct4, ct5;
+
+double c2pX = 0, c2pY = 0, c2pZ = 0;
+
 //-----------------------------------------------------------------------------
 // Purpose:
 //-----------------------------------------------------------------------------
@@ -81,6 +92,7 @@ public:
 	}
 
 	virtual EVRInitError Init( vr::IVRDriverContext *pDriverContext ) ;
+
 	virtual void Cleanup() ;
 
 private:
@@ -195,7 +207,6 @@ public:
 	{
 		m_unObjectId = unObjectId;
 		m_ulPropertyContainer = vr::VRProperties()->TrackedDeviceToPropertyContainer( m_unObjectId );
-
 
 		vr::VRProperties()->SetStringProperty( m_ulPropertyContainer, Prop_ModelNumber_String, m_sModelNumber.c_str() );
 		vr::VRProperties()->SetStringProperty( m_ulPropertyContainer, Prop_RenderModelName_String, m_sModelNumber.c_str() );
@@ -403,17 +414,214 @@ public:
 
 		return pose;
 	}
-	
+
 
 	void RunFrame()
 	{
 		// In a real driver, this should happen from some pose tracking thread.
 		// The RunFrame interval is unspecified and can be very irregular if some other
 		// driver blocks it for some periodic task.
-		if ( m_unObjectId != vr::k_unTrackedDeviceIndexInvalid )
+		if (m_unObjectId != vr::k_unTrackedDeviceIndexInvalid)
 		{
-			vr::VRServerDriverHost()->TrackedDevicePoseUpdated( m_unObjectId, GetPose(), sizeof( DriverPose_t ) );
+			vr::VRServerDriverHost()->TrackedDevicePoseUpdated(m_unObjectId, GetPose(), sizeof(DriverPose_t));
 		}
+
+
+
+		//Controller1
+		DriverPose_t left_pose = controller_left.GetPose();
+
+		if ((GetAsyncKeyState(70) & 0x8000) != 0) cyaw += 0.1; //F
+		if ((GetAsyncKeyState(72) & 0x8000) != 0) cyaw += -0.1; //H
+
+		if ((GetAsyncKeyState(84) & 0x8000) != 0) croll += 0.1; //T
+		if ((GetAsyncKeyState(71) & 0x8000) != 0) croll += -0.1; //G
+
+		if ((GetAsyncKeyState(66) & 0x8000) != 0) //B
+		{
+			cpitch = 0;
+			croll = 0;
+		}
+
+		//Change position controller1
+		if ((GetAsyncKeyState(87) & 0x8000) != 0) cpZ += -0.01; //W
+		if ((GetAsyncKeyState(83) & 0x8000) != 0) cpZ += 0.01; //S
+
+		if ((GetAsyncKeyState(65) & 0x8000) != 0) cpX += -0.01; //A
+		if ((GetAsyncKeyState(68) & 0x8000) != 0) cpX += 0.01; //D
+
+		if ((GetAsyncKeyState(81) & 0x8000) != 0) cpY += 0.01; //Q
+		if ((GetAsyncKeyState(69) & 0x8000) != 0) cpY += -0.01; //E
+
+		if ((GetAsyncKeyState(82) & 0x8000) != 0) { cpX = 0; cpY = 0; cpZ = 0; } //R
+
+		left_pose.vecPosition[0] = cpX;
+		left_pose.vecPosition[1] = cpY;
+		left_pose.vecPosition[2] = cpZ;
+
+		//Convert yaw, pitch, roll to quaternion
+		ct0 = cos(cyaw * 0.5);
+		ct1 = sin(cyaw * 0.5);
+		ct2 = cos(croll * 0.5);
+		ct3 = sin(croll * 0.5);
+		ct4 = cos(cpitch * 0.5);
+		ct5 = sin(cpitch * 0.5);
+
+		//Set head tracking rotation
+		left_pose.qRotation.w = ct0 * ct2 * ct4 + ct1 * ct3 * ct5;
+		left_pose.qRotation.x = ct0 * ct3 * ct4 - ct1 * ct2 * ct5;
+		left_pose.qRotation.y = ct0 * ct2 * ct5 + ct1 * ct3 * ct4;
+		left_pose.qRotation.z = ct1 * ct2 * ct4 - ct0 * ct3 * ct5;
+
+		
+
+		//controller2_state.ulButtonPressed = 0;
+		//controller2_state.ulButtonTouched = 0;
+		//controller2_state.rAxis[1].x = 0;
+		//controller2_state.ulButtonPressed |= vr::ButtonMaskFromId(vr::k_EButton_System); 
+
+		/* Buttons
+					vr::ButtonMaskFromId(vr::k_EButton_ApplicationMenu) |
+					vr::ButtonMaskFromId(vr::k_EButton_SteamVR_Touchpad) |
+					vr::ButtonMaskFromId(vr::k_EButton_SteamVR_Trigger) |
+					vr::ButtonMaskFromId(vr::k_EButton_System) |
+					vr::ButtonMaskFromId(vr::k_EButton_Grip);
+		*/
+
+		//Controller1
+		VRControllerState_t controller1_state = controller_right.GetControllerState();
+
+		if ((GetAsyncKeyState(90) & 0x8000) != 0) { //z
+			VRServerDriverHost()->TrackedDeviceButtonPressed(controller_left.getObjectID(), vr::k_EButton_System, 0.0);
+		}
+		else {
+			VRServerDriverHost()->TrackedDeviceButtonUnpressed(controller_left.getObjectID(), vr::k_EButton_System, 0.0);
+		}
+
+		if ((GetAsyncKeyState(88) & 0x8000) != 0) { //x
+			VRServerDriverHost()->TrackedDeviceButtonPressed(controller_left.getObjectID(), vr::k_EButton_SteamVR_Trigger, 0.0);
+			controller1_state.rAxis[1].x = 1.0f;
+			VRServerDriverHost()->TrackedDeviceAxisUpdated(controller_left.getObjectID(), 1, controller1_state.rAxis[1]);
+		}
+		else {
+			controller1_state.rAxis[1].x = 0.0f;
+			VRServerDriverHost()->TrackedDeviceAxisUpdated(controller_left.getObjectID(), 1, controller1_state.rAxis[1]);
+			VRServerDriverHost()->TrackedDeviceButtonUnpressed(controller_left.getObjectID(), vr::k_EButton_SteamVR_Trigger, 0.0);
+		}
+
+
+		if ((GetAsyncKeyState(67) & 0x8000) != 0) {//c
+			VRServerDriverHost()->TrackedDeviceButtonPressed(controller_left.getObjectID(), vr::k_EButton_ApplicationMenu, 0.0);
+		}
+		else {
+			VRServerDriverHost()->TrackedDeviceButtonUnpressed(controller_left.getObjectID(), vr::k_EButton_ApplicationMenu, 0.0);
+		}
+
+		if ((GetAsyncKeyState(86) & 0x8000) != 0) {//v
+			VRServerDriverHost()->TrackedDeviceButtonPressed(controller_left.getObjectID(), vr::k_EButton_Grip, 0.0);
+		}
+		else {
+			VRServerDriverHost()->TrackedDeviceButtonUnpressed(controller_left.getObjectID(), vr::k_EButton_Grip, 0.0);
+		}
+
+		if ((GetAsyncKeyState(49) & 0x8000) != 0) {//"1"
+			VRServerDriverHost()->TrackedDeviceButtonPressed(controller_left.getObjectID(), vr::k_EButton_SteamVR_Touchpad, 0.0);
+		}
+		else {
+			VRServerDriverHost()->TrackedDeviceButtonUnpressed(controller_left.getObjectID(), vr::k_EButton_SteamVR_Touchpad, 0.0);
+		}
+
+
+		//controller2_state.unPacketNum = controller2_state.unPacketNum + 1;
+
+		//controller_left.updateControllerState(controller2_state);
+		//controller_right.updateControllerState(controller2_state); //Set state controller2
+
+
+		controller_left.updateControllerPose(left_pose);
+
+		VRServerDriverHost()->TrackedDevicePoseUpdated(controller_left.getObjectID(), controller_left.GetPose(), sizeof(DriverPose_t));
+
+		//Controller2
+
+		VRControllerState_t controller2_state = controller_right.GetControllerState();
+
+		if ((GetAsyncKeyState(78) & 0x8000) != 0) { //n
+			VRServerDriverHost()->TrackedDeviceButtonPressed(controller_right.getObjectID(), vr::k_EButton_System, 0.0);
+		}
+		else {
+			VRServerDriverHost()->TrackedDeviceButtonUnpressed(controller_right.getObjectID(), vr::k_EButton_System, 0.0);
+		}
+
+		if ((GetAsyncKeyState(188) & 0x8000) != 0) { //",<"
+			VRServerDriverHost()->TrackedDeviceButtonPressed(controller_right.getObjectID(), vr::k_EButton_SteamVR_Trigger, 0.0);
+			controller2_state.rAxis[1].x = 1.0f;
+			VRServerDriverHost()->TrackedDeviceAxisUpdated(controller_right.getObjectID(), 1, controller2_state.rAxis[1]);
+		}
+		else {
+			controller2_state.rAxis[1].x = 0.0f;
+			VRServerDriverHost()->TrackedDeviceAxisUpdated(controller_right.getObjectID(), 1, controller2_state.rAxis[1]);
+			VRServerDriverHost()->TrackedDeviceButtonUnpressed(controller_right.getObjectID(), vr::k_EButton_SteamVR_Trigger, 0.0);
+		}
+
+
+		if ((GetAsyncKeyState(190) & 0x8000) != 0) {//".>"
+			VRServerDriverHost()->TrackedDeviceButtonPressed(controller_right.getObjectID(), vr::k_EButton_ApplicationMenu, 0.0);
+		}
+		else {
+			VRServerDriverHost()->TrackedDeviceButtonUnpressed(controller_right.getObjectID(), vr::k_EButton_ApplicationMenu, 0.0);
+		}
+
+		if ((GetAsyncKeyState(191) & 0x8000) != 0) {//"/?"
+			VRServerDriverHost()->TrackedDeviceButtonPressed(controller_right.getObjectID(), vr::k_EButton_Grip, 0.0);
+		}
+		else {
+			VRServerDriverHost()->TrackedDeviceButtonUnpressed(controller_right.getObjectID(), vr::k_EButton_Grip, 0.0);
+		}
+
+		if ((GetAsyncKeyState(50) & 0x8000) != 0) {//"2"
+			VRServerDriverHost()->TrackedDeviceButtonPressed(controller_right.getObjectID(), vr::k_EButton_SteamVR_Touchpad, 0.0);
+		}
+		else {
+			VRServerDriverHost()->TrackedDeviceButtonUnpressed(controller_right.getObjectID(), vr::k_EButton_SteamVR_Touchpad, 0.0);
+		}
+
+		if ((GetAsyncKeyState(51) & 0x8000) != 0) { //"3" 
+			controller2_state.rAxis[0].x = 1.0f;
+			controller2_state.rAxis[0].y = 0.0f;
+			VRServerDriverHost()->TrackedDeviceAxisUpdated(controller_right.getObjectID(), 0, controller2_state.rAxis[0]); 
+		} 
+		else {
+			controller2_state.rAxis[0].x = 0.0f;
+			controller2_state.rAxis[0].y = 0.0f;
+			VRServerDriverHost()->TrackedDeviceAxisUpdated(controller_right.getObjectID(), 0, controller2_state.rAxis[0]);
+		}
+
+		DriverPose_t right_pose = controller_right.GetPose();
+
+		if((GetAsyncKeyState(73) & 0x8000) != 0) c2pZ += -0.01; //I
+		if ((GetAsyncKeyState(75) & 0x8000) != 0) c2pZ += 0.01; //K
+
+		if ((GetAsyncKeyState(74) & 0x8000) != 0) c2pX += -0.01; //J
+		if ((GetAsyncKeyState(76) & 0x8000) != 0) c2pX += 0.01; //L
+
+		if ((GetAsyncKeyState(85) & 0x8000) != 0) c2pY += 0.01; //U
+		if ((GetAsyncKeyState(79) & 0x8000) != 0) c2pY += -0.01; //O
+
+		if ((GetAsyncKeyState(80) & 0x8000) != 0) { c2pX = 0; c2pY = 0; c2pZ = 0; } //P
+
+		right_pose.vecPosition[0] = c2pX;
+		right_pose.vecPosition[1] = c2pY;
+		right_pose.vecPosition[2] = c2pZ;
+
+		//Controllers rotation one for two 
+		right_pose.qRotation.w = left_pose.qRotation.w;
+		right_pose.qRotation.x = left_pose.qRotation.x;
+		right_pose.qRotation.y = left_pose.qRotation.y;
+		right_pose.qRotation.z = left_pose.qRotation.z;
+
+		controller_right.updateControllerPose(right_pose);
+		VRServerDriverHost()->TrackedDevicePoseUpdated(controller_right.getObjectID(), controller_right.GetPose(), sizeof(DriverPose_t));
 	}
 
 	std::string GetSerialNumber() const { return m_sSerialNumber; }
@@ -472,6 +680,26 @@ EVRInitError CServerDriver_Sample::Init( vr::IVRDriverContext *pDriverContext )
 
 	m_pNullHmdLatest = new CSampleDeviceDriver();
 	vr::VRServerDriverHost()->TrackedDeviceAdded( m_pNullHmdLatest->GetSerialNumber().c_str(), vr::TrackedDeviceClass_HMD, m_pNullHmdLatest );
+
+	DriverPose_t test_pose = { 0 };
+	test_pose.deviceIsConnected = true;
+	test_pose.poseIsValid = true;
+	test_pose.willDriftInYaw = false;
+	test_pose.shouldApplyHeadModel = false;
+	test_pose.poseTimeOffset = 0;
+	test_pose.result = ETrackingResult::TrackingResult_Running_OK;
+	test_pose.qDriverFromHeadRotation = { 1,0,0,0 };
+	test_pose.qWorldFromDriverRotation = { 1,0,0,0 };
+
+	VRControllerState_t test_state;
+	test_state.ulButtonPressed = test_state.ulButtonTouched = 0;
+
+	controller_left = DummyController("example_con1", false, test_pose, test_state);
+	controller_right = DummyController("example_con2", true, test_pose, test_state);
+
+	VRServerDriverHost()->TrackedDeviceAdded("example_con1", vr::TrackedDeviceClass_Controller, &controller_left);
+	VRServerDriverHost()->TrackedDeviceAdded("example_con2", vr::TrackedDeviceClass_Controller, &controller_right);
+
 	return VRInitError_None;
 }
 
