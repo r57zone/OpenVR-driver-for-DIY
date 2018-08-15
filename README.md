@@ -22,7 +22,7 @@ Z, X, C, V, 1 - сontroller buttons.<br>
 T, G, F, H - rotation of both controllers.<br>
 B - reset the rotation of both controllers.
 
-## Controller Buttons 2
+## Controller buttons 2
 I, K, J, L - move left, right, forward and back.<br>
 U, O - move up and down.<br>
 P - reset the move.<br>
