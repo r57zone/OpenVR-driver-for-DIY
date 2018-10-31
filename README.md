@@ -26,7 +26,7 @@ B - reset the rotation of both controllers.
 I, K, J, L - move left, right, forward and back.<br>
 U, O - move up and down.<br>
 P - reset the move.<br>
-N, M, <, >, ? - сontroller buttons.
+N, M, <, >, 4 - сontroller buttons.
 
 ## Setup
 1. Move and replace the "null" folder, from the archive, to the folder "...\Steam\steamapps\common\SteamVR\drivers\null".
