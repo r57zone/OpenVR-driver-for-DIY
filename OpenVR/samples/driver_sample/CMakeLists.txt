@@ -13,4 +13,3 @@ target_link_libraries(${TARGET_NAME}
   ${CMAKE_DL_LIBS}
 )
 
-setTargetOutputDirectory(${TARGET_NAME})
