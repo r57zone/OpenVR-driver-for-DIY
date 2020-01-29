@@ -9,3 +9,6 @@ add_custom_target(uncrustify
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
     COMMENT "beautify code"
 )
+
+include(FeatureSummary)
+feature_summary(WHAT ALL FILENAME ${CMAKE_BINARY_DIR}/features.log APPEND)
