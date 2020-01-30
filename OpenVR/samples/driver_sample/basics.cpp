@@ -14,3 +14,13 @@ const char *const k_pch_Sample_SecondsFromVsyncToPhotons_Float = "secondsFromVsy
 const char *const k_pch_Sample_DisplayFrequency_Float = "displayFrequency";
 
 bool g_bExiting = false;
+
+#if !defined(_WINDOWS)
+
+int GetAsyncKeyState(int key)
+{
+    // TODO implement
+    return 0;
+}
+
+#endif
