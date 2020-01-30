@@ -2,13 +2,14 @@ include_directories(../../headers)
 
 set(TARGET_NAME driver_sample)
 
-add_library(${TARGET_NAME} SHARED
+add_library(${TARGET_NAME} MODULE
   driverlog.cpp
   driverlog.h
   driver_sample.cpp
 )
 
 add_definitions(-DDRIVER_SAMPLE_EXPORTS)
+SET_TARGET_PROPERTIES(${TARGET_NAME} PROPERTIES PREFIX "")
 
 target_link_libraries(${TARGET_NAME}
   ${OPENVR_LIBRARIES}
