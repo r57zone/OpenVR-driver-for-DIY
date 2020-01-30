@@ -18,7 +18,6 @@ add_library(${TARGET_NAME} MODULE
   cwatchdogdriver_sample.h
 )
 
-add_definitions(-DDRIVER_SAMPLE_EXPORTS)
 SET_TARGET_PROPERTIES(${TARGET_NAME} PROPERTIES PREFIX "")
 
 target_link_libraries(${TARGET_NAME}
