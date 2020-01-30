@@ -1,3 +1,5 @@
+include_directories(../../headers)
+
 set(TARGET_NAME driver_sample)
 
 add_library(${TARGET_NAME} SHARED
