@@ -8,18 +8,14 @@
 #include <string>
 #include <openvr_driver.h>
 
-extern void DriverLog( const char *pchFormat, ... );
-
+extern void DriverLog(const char *pchFormat, ...);
 
 // --------------------------------------------------------------------------
 // Purpose: Write to the log file only in debug builds
 // --------------------------------------------------------------------------
-extern void DebugDriverLog( const char *pchFormat, ... );
+extern void DebugDriverLog(const char *pchFormat, ...);
 
-
-extern bool InitDriverLog( vr::IVRDriverLog *pDriverLog );
+extern bool InitDriverLog(vr::IVRDriverLog *pDriverLog);
 extern void CleanupDriverLog();
-
-
 
 #endif // DRIVERLOG_H

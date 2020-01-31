@@ -29,11 +29,36 @@ P - reset the move.<br>
 N, M, <, >, 4 - сontroller buttons.
 
 ## Setup
-1. Move and replace the "null" folder, from the archive, to the folder "...\Steam\steamapps\common\SteamVR\drivers\null".
-2. Move and replace the file "steamvr.vrsettings", from the archive, in the folder "...\Steam\config".
+
+### Windows
+1. copy the folder "driver" from the archive into the folder "<steam-install-path>\steamapps\common\SteamVR
+2. start steamVR
+
+### Linux
+1. build driver with
+ git clone git@github.com:r57zone/OpenVR-driver-for-DIY.git openvr-driver-for-diy
+ mkdir openvr-driver-for-diy-build
+ cd openvr-driver-for-diy-build
+ cmake ../openvr-driver-for-diy
+ make
+2. install driver with
+ make install
+3. start SteamVR
+
+## Activate driver
+The driver is activated by default and requires no further settings. If it was previously disabled, open the file
+"<steam-install-path>\steamapps\common\SteamVR\drivers\sample\recources\settings\default.vrsettings"
+in an editor and set the "enable" attribute to true, then save and restart SteamVR.
+
+## Disable driver
+Open the file "<steam-install-path>\steamapps\common\SteamVR\drivers\sample\recources\settings\default.vrsettings"
+in an editor and set the attribute "enable" to false, then save and restart SteamVR.
+
+## Remove driver
+To remove, delete the directory "<steam-install-path>\steamapps\common\SteamVR\drivers\sample".
 
 ## Download
->Version for x86 & x64.<br>
+>Windows Version for x86 & x64.<br>
 **[Download](https://github.com/r57zone/OpenVR-driver-for-DIY/releases)**<br>
 
 ## Feedback
