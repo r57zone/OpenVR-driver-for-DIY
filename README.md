@@ -35,15 +35,19 @@ N, M, <, >, 4 - сontroller buttons.
 2. start steamVR
 
 ### Linux
-1. build driver with
+1. Build Driver:
+ ```
  git clone git@github.com:r57zone/OpenVR-driver-for-DIY.git openvr-driver-for-diy
  mkdir openvr-driver-for-diy-build
  cd openvr-driver-for-diy-build
  cmake ../openvr-driver-for-diy
  make
-2. install driver with
+ ```
+2. Install Driver:
+ ```
  make install
-3. start SteamVR
+ ```
+3. Start [SteamVR](https://store.steampowered.com/steamvr)
 
 ## Activate driver
 The driver is activated by default and requires no further settings. If it was previously disabled, open the file
