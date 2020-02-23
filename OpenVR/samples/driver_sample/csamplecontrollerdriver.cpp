@@ -229,7 +229,7 @@ DriverPose_t CSampleControllerDriver::GetPose()
     ct4 = cos(cpitch * 0.5);
     ct5 = sin(cpitch * 0.5);
 
-    //Set head tracking rotation
+    //Set controller rotation
     pose.qRotation.w = ct0 * ct2 * ct4 + ct1 * ct3 * ct5;
     pose.qRotation.x = ct0 * ct3 * ct4 - ct1 * ct2 * ct5;
     pose.qRotation.y = ct0 * ct2 * ct5 + ct1 * ct3 * ct4;
