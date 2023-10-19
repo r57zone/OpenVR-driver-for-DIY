@@ -11,7 +11,7 @@ NumPad 1 & 3 - rotation of the head left and right.<br>
 NumPad 9 - resetting of turns and rotation.
 Up & Down - move forward and back.<br>
 Left & Right - move left and right.<br>
-PageUp и PageDown - move up and down.<br>
+PageUp & PageDown - move up and down.<br>
 End - reset position.
 
 ## Controller buttons 1
